@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U test_user -d test_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  test:
+    build: .
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=test_db
+      - DB_USER=test_user
+      - DB_PASSWORD=test_password
+      - TESTING=True
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    command: pytest -v tests/test_integration.py
