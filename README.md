@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/kevin-kidd/telegram-referral-bot/actions/workflows/main.yml/badge.svg)](https://github.com/kevin-kidd/telegram-referral-bot/actions/workflows/main.yml)
 
-A simple Telegram referral bot for tracking invites to your channel/group.
+Boost your Telegram channel's growth with this powerful, user-friendly referral bot. It generates unique referral links and accurately tracks invites while preventing self-referrals. Built using Python and PostgreSQL, this bot is easy to set up and scales effortlessly for communities of any size.
 
 ## Table of Contents
 
