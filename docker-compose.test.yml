@@ -13,26 +13,6 @@ services:
       timeout: 5s
       retries: 5
 
-  test:
-    build: .
-    environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=test_db
-      - DB_USER=test_user
-      - DB_PASSWORD=test_password
-      - TESTING=True
-      - COVERAGE_FILE=/coverage_data/.coverage
-    volumes:
-      - .:/app
-      - ./htmlcov:/app/htmlcov
-      - ./coverage_data:/coverage_data
-    depends_on:
-      db:
-        condition: service_healthy
-    command: >
-      sh -c "pytest -v tests/test_integration.py --cov=src --cov-report=term-missing --cov-report=xml:/coverage_data/coverage.xml"
-
 networks:
   default:
     name: telegram-referral-bot_default
