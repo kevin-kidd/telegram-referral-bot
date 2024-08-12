@@ -7,10 +7,13 @@ It provides functions for creating the database, setting up tables, and managing
 
 import psycopg2
 from psycopg2 import pool
-from .config import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
-from contextlib import contextmanager
-import logging
+from .config import DB_NAME, DB_USER, DB_PASSWORD
 import os
+import logging
+from contextlib import contextmanager
+
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = os.getenv("DB_PORT", "5432")
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +71,9 @@ def create_database():
     """Create the database if it doesn't exist."""
     conn = None
     try:
+        print(
+            f"Attempting to connect to: host={DB_HOST}, port={DB_PORT}, user={DB_USER}, dbname=postgres"
+        )
         conn = psycopg2.connect(
             host=DB_HOST,
             port=DB_PORT,
@@ -78,9 +84,7 @@ def create_database():
         conn.autocommit = True
         with conn.cursor() as cur:
             db_name = DB_NAME if not is_testing else f"test_{DB_NAME}"
-            cur.execute(
-                "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (db_name,)
-            )
+            cur.execute("SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (db_name,))
             exists = cur.fetchone()
             if not exists:
                 cur.execute(f"CREATE DATABASE {db_name}")
