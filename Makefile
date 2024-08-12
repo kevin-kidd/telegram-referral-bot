@@ -1,7 +1,7 @@
 PYTHON := python3
 DOCKER_COMPOSE := docker-compose -f docker-compose.test.yml
 
-.PHONY: install run test lint setup-db test-coverage test-coverage-html unit-test integration-test test-workflow test-workflow-push test-workflow-pr test-workflow-build
+.PHONY: install run test lint setup-db test-coverage test-coverage-html unit-test integration-test
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt
@@ -16,7 +16,7 @@ integration-test:
 	$(DOCKER_COMPOSE) up -d db
 	@echo "Waiting for database to be ready..."
 	@sleep 5
-	$(DOCKER_COMPOSE) run --rm test pytest -v tests/test_integration.py
+	DB_HOST=localhost DB_PORT=5432 DB_NAME=test_db DB_USER=test_user DB_PASSWORD=test_password TESTING=True $(PYTHON) -m pytest -v tests/test_integration.py
 	$(DOCKER_COMPOSE) down
 
 test: unit-test integration-test
@@ -34,16 +34,15 @@ setup-db:
 test-coverage:
 	mkdir -p coverage_data
 	chmod 777 coverage_data
-	docker rm -f telegram-referral-bot_test_run || true
 	$(DOCKER_COMPOSE) up -d db
 	@echo "Waiting for database to be ready..."
 	@sleep 5
-	$(DOCKER_COMPOSE) run --rm --name telegram-referral-bot_test_run test
+	DB_HOST=localhost DB_PORT=5432 DB_NAME=test_db DB_USER=test_user DB_PASSWORD=test_password TESTING=True $(PYTHON) -m pytest --cov=src --cov-report=term-missing --cov-report=xml:coverage_data/coverage.xml tests/
 	$(DOCKER_COMPOSE) down
 
 test-coverage-html:
 	$(DOCKER_COMPOSE) up -d db
 	@echo "Waiting for database to be ready..."
 	@sleep 5
-	$(DOCKER_COMPOSE) run --rm test pytest --cov=src --cov-report=html tests/
+	DB_HOST=localhost DB_PORT=5432 DB_NAME=test_db DB_USER=test_user DB_PASSWORD=test_password TESTING=True $(PYTHON) -m pytest --cov=src --cov-report=html tests/
 	$(DOCKER_COMPOSE) down
