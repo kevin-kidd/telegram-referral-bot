@@ -4,8 +4,11 @@ Integration tests for the Telegram Referral Bot.
 This module contains integration tests that verify the interaction between
 different components of the bot, including database operations and bot commands.
 
+These tests use a real PostgreSQL database (in a Docker container) to ensure
+that database operations work as expected in a production-like environment.
+
 Each test function is decorated with @pytest.mark.integration to categorize
-them as integration tests.
+them as integration tests and allow selective test execution.
 """
 
 import pytest
@@ -39,10 +42,13 @@ logger = logging.getLogger(__name__)
 @pytest.fixture(scope="session")
 def db_pool():
     """
-    Create a database connection pool for the entire test session.
+    Create and manage a database connection pool for the entire test session.
 
-    This fixture creates the test database, initializes the connection pool,
-    and closes it after all tests are complete.
+    This fixture:
+    1. Creates the test database
+    2. Initializes the connection pool
+    3. Yields control to the tests
+    4. Closes the connection pool after all tests are complete
 
     Yields:
         None
@@ -205,7 +211,9 @@ def test_send_welcome_integration(db_cursor, caplog):
 
     # Check that the referral count has been incremented
     referral_amount = get_referral_amount("referrer")
-    assert referral_amount == 1, f"Expected referral count to be 1, but got {referral_amount}"
+    assert (
+        referral_amount == 1
+    ), f"Expected referral count to be 1, but got {referral_amount}"
 
     # Verify that the user is no longer considered new after the welcome message
     assert not check_new_user(123), "User should not be new after welcome message"
@@ -313,7 +321,9 @@ def test_send_welcome_self_referral(db_cursor, caplog):
 
     with patch("src.bot.reply_to") as mock_reply_to:
         send_welcome(message)
-        mock_reply_to.assert_called_once_with(message, "You can not use your own referral link!")
+        mock_reply_to.assert_called_once_with(
+            message, "You can not use your own referral link!"
+        )
 
     # Clean up test data
     db_cursor.execute("DELETE FROM referrals WHERE username = %s", ("testuser",))
