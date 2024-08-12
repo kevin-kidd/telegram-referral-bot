@@ -7,7 +7,7 @@ RUN groupadd -r kevin && useradd -r -g kevin kevin
 WORKDIR /app
 RUN chown kevin:kevin /app
 
-# Install dependencies and clean up
+# Install dependencies and clean up in one layer
 COPY requirements.txt .
 RUN apt-get update && apt-get install -y --no-install-recommends gcc \
     && pip install --no-cache-dir -r requirements.txt \
