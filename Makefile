@@ -13,11 +13,11 @@ unit-test:
 	TESTING=True $(PYTHON) -m pytest -v tests/test_unit.py
 
 integration-test:
-	@echo "Running integration tests with Docker..."
-	@echo "If this fails, please ensure Docker is installed and running,"
-	@echo "and that the Docker CLI is available in your system PATH."
-	$(DOCKER_COMPOSE) up --build --exit-code-from test || \
-	(echo "Docker command failed. Is Docker installed and running?" && exit 1)
+	$(DOCKER_COMPOSE) up -d db
+	@echo "Waiting for database to be ready..."
+	@sleep 5
+	$(DOCKER_COMPOSE) run --rm test pytest -v tests/test_integration.py
+	$(DOCKER_COMPOSE) down
 
 test: unit-test integration-test
 
