@@ -24,6 +24,8 @@ services:
       - TESTING=True
     volumes:
       - .:/app
+      - ./htmlcov:/app/htmlcov
+      - ./coverage:/app/coverage
     depends_on:
       db:
         condition: service_healthy

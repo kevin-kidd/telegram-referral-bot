@@ -35,12 +35,12 @@ test-coverage:
 	$(DOCKER_COMPOSE) up -d db
 	@echo "Waiting for database to be ready..."
 	@sleep 5
-	TESTING=True $(PYTHON) -m pytest --cov=src --cov-report=term-missing tests/
+	$(DOCKER_COMPOSE) run --rm test pytest --cov=src --cov-report=term-missing --cov-report=xml:coverage/coverage.xml tests/
 	$(DOCKER_COMPOSE) down
 
 test-coverage-html:
 	$(DOCKER_COMPOSE) up -d db
 	@echo "Waiting for database to be ready..."
 	@sleep 5
-	TESTING=True $(PYTHON) -m pytest --cov=src --cov-report=html tests/
+	$(DOCKER_COMPOSE) run --rm test pytest --cov=src --cov-report=html tests/
 	$(DOCKER_COMPOSE) down
