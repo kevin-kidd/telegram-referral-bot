@@ -1,7 +1,7 @@
 PYTHON := python3
 DOCKER_COMPOSE := docker-compose -f docker-compose.test.yml
 
-.PHONY: install run test lint setup-db test-coverage test-coverage-html unit-test integration-test
+.PHONY: install run test lint setup-db test-coverage test-coverage-html unit-test integration-test test-workflow test-workflow-push test-workflow-pr test-workflow-build
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt
@@ -25,22 +25,20 @@ lint:
 	$(PYTHON) -m flake8 .
 
 setup-db:
-	@if [ "$(MAKECMDGOALS)" = "integration-test" ] || [ "$(MAKECMDGOALS)" = "test-coverage" ] || [ "$(MAKECMDGOALS)" = "test-coverage-html" ]; then \
-		$(DOCKER_COMPOSE) up -d db; \
-		DB_HOST=db $(PYTHON) -m src.db_setup; \
-		$(DOCKER_COMPOSE) down; \
-	else \
-		docker-compose up -d db; \
-		DB_HOST=localhost $(PYTHON) -m src.db_setup; \
-		docker-compose down; \
-	fi
+	docker-compose up -d db
+	@echo "Waiting for database to be ready..."
+	@sleep 5
+	DB_HOST=localhost DB_PORT=5432 $(PYTHON) -m src.db_setup
+	docker-compose down
 
-test-coverage: setup-db
+test-coverage:
 	$(DOCKER_COMPOSE) up -d db
+	@echo "Waiting for database to be ready..."
+	@sleep 5
 	TESTING=True $(PYTHON) -m pytest --cov=src --cov-report=term-missing tests/
 	$(DOCKER_COMPOSE) down
 
-test-coverage-html: setup-db
+test-coverage-html:
 	$(DOCKER_COMPOSE) up -d db
 	@echo "Waiting for database to be ready..."
 	@sleep 5
