@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends gcc \
     && apt-get purge -y --auto-remove gcc \
     && rm -rf /var/lib/apt/lists/*
 
+# Create coverage directory and set permissions
+RUN mkdir /coverage_data && chown appuser:appuser /coverage_data && chmod 755 /coverage_data
+
 COPY . .
 
 # Change ownership of the /app directory to appuser

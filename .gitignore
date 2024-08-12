@@ -31,3 +31,4 @@ Thumbs.db
 htmlcov/*
 .pytest_cache/*
 coverage/*
+coverage_data/*

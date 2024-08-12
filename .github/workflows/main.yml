@@ -49,14 +49,12 @@ jobs:
     
     - name: Run coverage
       run: |
-        mkdir -p coverage
-        chmod 777 coverage
         make test-coverage
-        container_id=$(docker ps -aqf "name=telegram-referral-bot_test_run")
-        if [ ! -z "$container_id" ]; then
-          docker cp $container_id:/tmp/coverage.xml ./coverage/
+        if [ -f coverage_data/coverage.xml ]; then
+          mkdir -p coverage
+          cp coverage_data/coverage.xml coverage/
         else
-          echo "Container not found. Coverage file could not be copied."
+          echo "Coverage file not found."
         fi
 
     - name: Upload coverage to Codecov

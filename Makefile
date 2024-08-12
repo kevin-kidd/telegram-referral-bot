@@ -32,10 +32,13 @@ setup-db:
 	docker-compose down
 
 test-coverage:
+	mkdir -p coverage_data
+	chmod 777 coverage_data
+	docker rm -f telegram-referral-bot_test_run || true
 	$(DOCKER_COMPOSE) up -d db
 	@echo "Waiting for database to be ready..."
 	@sleep 5
-	$(DOCKER_COMPOSE) run --name telegram-referral-bot_test_run test pytest --cov=src --cov-report=term-missing --cov-report=xml:/tmp/coverage.xml tests/
+	$(DOCKER_COMPOSE) run --rm --name telegram-referral-bot_test_run test pytest --cov=src --cov-report=term-missing --cov-report=xml:/coverage_data/coverage.xml tests/
 	$(DOCKER_COMPOSE) down
 
 test-coverage-html:
