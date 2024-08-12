@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        python-version: [3.8, 3.9, "3.10"]
+        python-version: ["3.8", "3.10", "3.12", "3.13-dev"]
     
     steps:
     - uses: actions/checkout@v3
@@ -37,19 +37,21 @@ jobs:
         pip install -r requirements.txt
     
     - name: Run linter
-      run: flake8 .
+      run: make lint
     
     - name: Run unit tests
-      run: pytest -v -m "unit" tests/test_unit.py
+      run: make unit-test
     
     - name: Run coverage
       run: |
-        pytest --cov=src --cov-report=xml
-    
+        mkdir -p coverage
+        chmod 777 coverage
+        make test-coverage
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
-        file: ./coverage.xml
+        file: ./coverage/coverage.xml
 
   integration-test:
     name: Integration Tests
@@ -74,8 +76,7 @@ jobs:
         sudo apt-get install -y docker-compose
     
     - name: Run integration tests
-      run: |
-        docker-compose -f docker-compose.test.yml up --build --exit-code-from test
+      run: make integration-test
 
   build-and-push:
     name: Build and Push Docker Image
