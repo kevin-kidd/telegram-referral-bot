@@ -1,8 +1,20 @@
 """
 Telegram Referral Bot
 
-This module contains the main functionality for the Telegram Referral Bot,
+This module contains the core functionality for the Telegram Referral Bot,
 including database operations, message handling, and bot commands.
+
+The bot allows users to create referral links, track referrals, and manage
+a referral system for a Telegram channel or group.
+
+Key components:
+- Database operations for storing and retrieving referral data
+- Telegram bot command handlers
+- Utility functions for referral code generation and management
+
+Usage:
+    Import this module to access the bot functionality and database operations.
+    The bot can be started by running the `bot.infinity_polling()` method.
 """
 
 import telebot
@@ -30,13 +42,19 @@ bot = telebot.TeleBot(BOT_TOKEN, threaded=False)
 
 def extract_unique_code(text: str) -> Optional[str]:
     """
-    Extract the unique code from the /start command message.
+    Extract the unique referral code from the /start command message.
 
     Args:
-        text (str): The message text.
+        text (str): The full text of the message, including the command.
 
     Returns:
-        Optional[str]: The extracted unique code, or None if not found.
+        Optional[str]: The extracted unique code if found, or None if not present.
+
+    Example:
+        >>> extract_unique_code("/start abc123")
+        'abc123'
+        >>> extract_unique_code("/start")
+        None
     """
     parts = text.split()
     if len(parts) > 1 and parts[0].lower() == "/start":
@@ -83,7 +101,9 @@ def grab_referral_code(username: str) -> Optional[str]:
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT unique_code FROM referrals WHERE username = %s", (username,))
+                cur.execute(
+                    "SELECT unique_code FROM referrals WHERE username = %s", (username,)
+                )
                 result = cur.fetchone()
                 if result:
                     return result[0]
@@ -210,7 +230,9 @@ def check_new_user(sender_user_id: int) -> bool:
                     (sender_user_id,),
                 )
                 result = cur.fetchone()
-                logger.debug(f"check_new_user result for user_id {sender_user_id}: {result}")
+                logger.debug(
+                    f"check_new_user result for user_id {sender_user_id}: {result}"
+                )
                 return result is None
     except Exception as e:
         logger.error(f"Error in check_new_user: {e}")
@@ -230,7 +252,9 @@ def check_user_exists(sender_username: str) -> Optional[bool]:
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT * FROM referrals WHERE username = %s;", (sender_username,))
+                cur.execute(
+                    "SELECT * FROM referrals WHERE username = %s;", (sender_username,)
+                )
                 return cur.fetchone() is not None
     except Exception as e:
         logger.error(f"Error in check_user_exists: {e}")
@@ -251,7 +275,9 @@ def get_referral_amount(username: str) -> int:
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT count FROM referrals WHERE username = %s", (username,))
+                cur.execute(
+                    "SELECT count FROM referrals WHERE username = %s", (username,)
+                )
                 result = cur.fetchone()
                 if result:
                     return result[0]
@@ -267,9 +293,6 @@ def get_referral_amount(username: str) -> int:
 def send_welcome(message):
     """
     Handle the /start command, process referral links, and send a welcome message.
-
-    This function extracts the unique code from the message, checks if it's a valid
-    referral, and updates the database accordingly.
 
     Args:
         message (telebot.types.Message): The incoming Telegram message.
@@ -291,7 +314,9 @@ def send_welcome(message):
             return
 
         if referrer_username and check_new_user(user_id):
-            logger.debug(f"New user detected. Incrementing counter for {referrer_username}")
+            logger.debug(
+                f"New user detected. Incrementing counter for {referrer_username}"
+            )
             increment_result = increment_counter(referrer_username)
             logger.debug(f"Increment result: {increment_result}")
             add_user_result = add_user(user_id)
@@ -368,7 +393,9 @@ def check_ref(message):
         bot.reply_to(message, "An error occurred. Please try again later.")
         return
     if not user_exists:
-        bot.reply_to(message, "You do not have a referral code! Please create one using /create")
+        bot.reply_to(
+            message, "You do not have a referral code! Please create one using /create"
+        )
         return
 
     referral_amount = get_referral_amount(username)

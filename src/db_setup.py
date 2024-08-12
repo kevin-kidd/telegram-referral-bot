@@ -23,19 +23,31 @@ is_testing = os.environ.get("TESTING", "False") == "True"
 
 
 def init_db_pool():
-    """Initialize the database connection pool."""
+    """
+    Initialize the database connection pool.
+
+    This function creates a SimpleConnectionPool with a minimum of 1 and maximum of 20 connections.
+    It uses the database configuration from the config module.
+
+    Raises:
+        Exception: If there's an error initializing the connection pool.
+    """
     global db_pool
     if db_pool is None:
-        db_pool = pool.SimpleConnectionPool(
-            1,
-            20,
-            host=DB_HOST,
-            port=DB_PORT,
-            dbname=DB_NAME if not is_testing else f"test_{DB_NAME}",
-            user=DB_USER,
-            password=DB_PASSWORD,
-        )
-        logger.info("Database connection pool initialized.")
+        try:
+            db_pool = pool.SimpleConnectionPool(
+                1,
+                20,
+                host=DB_HOST,
+                port=DB_PORT,
+                dbname=DB_NAME if not is_testing else f"test_{DB_NAME}",
+                user=DB_USER,
+                password=DB_PASSWORD,
+            )
+            logger.info("Database connection pool initialized.")
+        except Exception as e:
+            logger.error(f"Error initializing database connection pool: {e}")
+            raise
 
 
 def get_db_connection():
@@ -84,7 +96,9 @@ def create_database():
         conn.autocommit = True
         with conn.cursor() as cur:
             db_name = DB_NAME if not is_testing else f"test_{DB_NAME}"
-            cur.execute("SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (db_name,))
+            cur.execute(
+                "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (db_name,)
+            )
             exists = cur.fetchone()
             if not exists:
                 cur.execute(f"CREATE DATABASE {db_name}")
