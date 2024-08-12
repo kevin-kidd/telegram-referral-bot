@@ -7,13 +7,10 @@ It provides functions for creating the database, setting up tables, and managing
 
 import psycopg2
 from psycopg2 import pool
-from .config import DB_NAME, DB_USER, DB_PASSWORD
+from .config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 import os
 import logging
 from contextlib import contextmanager
-
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "5432")
 
 logger = logging.getLogger(__name__)
 
