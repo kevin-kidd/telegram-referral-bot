@@ -35,7 +35,7 @@ test-coverage:
 	$(DOCKER_COMPOSE) up -d db
 	@echo "Waiting for database to be ready..."
 	@sleep 5
-	$(DOCKER_COMPOSE) run --rm test pytest --cov=src --cov-report=term-missing --cov-report=xml:/tmp/coverage.xml tests/
+	$(DOCKER_COMPOSE) run --name telegram-referral-bot_test_run test pytest --cov=src --cov-report=term-missing --cov-report=xml:/tmp/coverage.xml tests/
 	$(DOCKER_COMPOSE) down
 
 test-coverage-html:
