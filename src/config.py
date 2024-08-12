@@ -18,9 +18,7 @@ if not IS_TESTING:
     try:
         load_dotenv()
     except IOError:
-        print(
-            "Error: Unable to load .env file. Please ensure it exists and is readable."
-        )
+        print("Error: Unable to load .env file. Please ensure it exists and is readable.")
         sys.exit(1)
 
 # Bot configuration
@@ -50,9 +48,7 @@ if not IS_TESTING:
     missing_vars = [var for var in required_vars if not globals()[var]]
 
     if missing_vars:
-        raise ValueError(
-            f"Missing required environment variables: {', '.join(missing_vars)}"
-        )
+        raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
 
 """
 Configuration variables:
