@@ -31,12 +31,6 @@ Thumbs.db
 .env
 .secrets
 
-# Test suite files
-.coverage
-htmlcov/*
-coverage/*
-.pytest_cache/*
-
 # Documentation
 *.md
 
