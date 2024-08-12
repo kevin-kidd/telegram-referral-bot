@@ -73,7 +73,7 @@ This project uses environment variables for configuration. To set up your enviro
 
 2. Open the `.env` file and replace the placeholder values with your actual configuration:
 
-   - `BOT_TOKEN`: Your Telegram Bot Token
+   - `BOT_TOKEN`: Your Telegram Bot Token (get one from [BotFather](https://t.me/botfather))
    - `CHANNEL_LINK`: The link to your Telegram channel or group
    - `DB_HOST`: PostgreSQL database host (default: localhost)
    - `DB_PORT`: PostgreSQL database port (default: 5432)
