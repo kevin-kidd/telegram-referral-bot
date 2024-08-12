@@ -205,9 +205,7 @@ def test_send_welcome_integration(db_cursor, caplog):
 
     # Check that the referral count has been incremented
     referral_amount = get_referral_amount("referrer")
-    assert (
-        referral_amount == 1
-    ), f"Expected referral count to be 1, but got {referral_amount}"
+    assert referral_amount == 1, f"Expected referral count to be 1, but got {referral_amount}"
 
     # Verify that the user is no longer considered new after the welcome message
     assert not check_new_user(123), "User should not be new after welcome message"
@@ -315,9 +313,7 @@ def test_send_welcome_self_referral(db_cursor, caplog):
 
     with patch("src.bot.reply_to") as mock_reply_to:
         send_welcome(message)
-        mock_reply_to.assert_called_once_with(
-            message, "You can not use your own referral link!"
-        )
+        mock_reply_to.assert_called_once_with(message, "You can not use your own referral link!")
 
     # Clean up test data
     db_cursor.execute("DELETE FROM referrals WHERE username = %s", ("testuser",))
