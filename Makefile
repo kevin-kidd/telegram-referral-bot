@@ -10,7 +10,7 @@ run:
 	$(PYTHON) main.py
 
 unit-test:
-	$(PYTHON) -m pytest -v tests/test_unit.py
+	TESTING=True $(PYTHON) -m pytest -v tests/test_unit.py
 
 integration-test:
 	@echo "Running integration tests with Docker..."

@@ -57,20 +57,11 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHANNEL_LINK = os.getenv("CHANNEL_LINK")
 
 # Database configuration
-if IS_TESTING:
-    # Use default values for testing environment
-    DB_HOST = os.getenv("DB_HOST", "localhost")
-    DB_PORT = int(os.getenv("DB_PORT", 5432))
-    DB_NAME = os.getenv("DB_NAME", "test_db")
-    DB_USER = os.getenv("DB_USER", "test_user")
-    DB_PASSWORD = os.getenv("DB_PASSWORD", "test_password")
-else:
-    # Use production values, with localhost as default for DB_HOST
-    DB_HOST = os.getenv("DB_HOST", "localhost")
-    DB_PORT = int(os.getenv("DB_PORT", 5432))
-    DB_NAME = os.getenv("DB_NAME")
-    DB_USER = os.getenv("DB_USER")
-    DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = int(os.getenv("DB_PORT", 5432))
+DB_NAME = os.getenv("DB_NAME", "test_db" if IS_TESTING else None)
+DB_USER = os.getenv("DB_USER", "test_user" if IS_TESTING else None)
+DB_PASSWORD = os.getenv("DB_PASSWORD", "test_password" if IS_TESTING else None)
 
 # Debug mode
 DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "t", "yes", "y")
