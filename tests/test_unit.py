@@ -175,9 +175,7 @@ def test_send_welcome(
 
     send_welcome(mock_message)
 
-    mock_reply_to.assert_called_with(
-        mock_message, "You can not use your own referral link!"
-    )
+    mock_reply_to.assert_called_with(mock_message, "You can not use your own referral link!")
 
     # Test case: No referral code
     mock_message.text = "/start"
@@ -230,9 +228,7 @@ def test_create_code(
 @patch("src.bot.reply_to")
 @patch("src.check_user_exists")
 @patch("src.get_referral_amount")
-def test_check_ref(
-    mock_get_referral_amount, mock_check_user_exists, mock_reply_to, mock_message
-):
+def test_check_ref(mock_get_referral_amount, mock_check_user_exists, mock_reply_to, mock_message):
     # Test case: User has a referral code
     mock_message.from_user.username = "testuser"
     mock_check_user_exists.return_value = True
