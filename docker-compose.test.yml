@@ -25,7 +25,7 @@ services:
     volumes:
       - .:/app
       - ./htmlcov:/app/htmlcov
-      - ./coverage:/app/coverage
+      - ./coverage:/tmp/coverage
     depends_on:
       db:
         condition: service_healthy

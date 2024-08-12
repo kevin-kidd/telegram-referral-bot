@@ -52,6 +52,7 @@ jobs:
         mkdir -p coverage
         chmod 777 coverage
         make test-coverage
+        docker cp $(docker ps -aqf "name=telegram-referral-bot_test_run"):/tmp/coverage.xml ./coverage/
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3

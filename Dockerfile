@@ -5,7 +5,7 @@ RUN groupadd -r kevin && useradd -r -g kevin kevin
 
 # Set the working directory and change its ownership
 WORKDIR /app
-RUN chown kevin:kevin /app
+RUN chown -R kevin:kevin /app && chmod -R 755 /app
 
 # Install dependencies and clean up in one layer
 COPY requirements.txt .
