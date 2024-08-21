@@ -65,9 +65,7 @@ def test_get_username_from_storage(mock_get_db_connection):
     """
     mock_cursor = MagicMock()
     mock_cursor.fetchone.return_value = ("testuser",)
-    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = (
-        mock_cursor
-    )
+    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = mock_cursor
 
     assert get_username_from_storage("abc123") == "testuser"
 
@@ -88,9 +86,7 @@ def test_grab_referral_code(mock_get_db_connection):
     """
     mock_cursor = MagicMock()
     mock_cursor.fetchone.return_value = ("abc123",)
-    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = (
-        mock_cursor
-    )
+    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = mock_cursor
 
     assert grab_referral_code("testuser") == "abc123"
 
@@ -113,9 +109,7 @@ def test_create_referral_code(mock_create_unique_code, mock_get_db_connection):
     mock_create_unique_code.return_value = "abc123"
     mock_cursor = MagicMock()
     mock_cursor.fetchone.return_value = ("abc123",)
-    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = (
-        mock_cursor
-    )
+    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = mock_cursor
 
     assert create_referral_code("testuser") == "abc123"
 
@@ -131,9 +125,7 @@ def test_add_user(mock_get_db_connection):
         mock_get_db_connection: A mocked database connection.
     """
     mock_cursor = MagicMock()
-    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = (
-        mock_cursor
-    )
+    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = mock_cursor
 
     assert add_user(123) is True
 
@@ -150,9 +142,7 @@ def test_increment_counter(mock_get_db_connection):
     """
     mock_cursor = MagicMock()
     mock_cursor.rowcount = 1
-    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = (
-        mock_cursor
-    )
+    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = mock_cursor
 
     assert increment_counter("testuser") is True
 
@@ -169,9 +159,7 @@ def test_check_new_user(mock_get_db_connection):
     """
     mock_cursor = MagicMock()
     mock_cursor.fetchone.return_value = None
-    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = (
-        mock_cursor
-    )
+    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = mock_cursor
 
     assert check_new_user(123) is True
 
@@ -192,9 +180,7 @@ def test_get_referral_amount(mock_get_db_connection):
     """
     mock_cursor = MagicMock()
     mock_cursor.fetchone.return_value = (5,)
-    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = (
-        mock_cursor
-    )
+    mock_get_db_connection.return_value.__enter__.return_value.cursor.return_value.__enter__.return_value = mock_cursor
 
     assert get_referral_amount("testuser") == 5
 
