@@ -22,7 +22,7 @@ integration-test:
 test: unit-test integration-test
 
 lint:
-	$(PYTHON) -m flake8 .
+	$(PYTHON) -m ruff check
 
 setup-db:
 	docker-compose up -d db
