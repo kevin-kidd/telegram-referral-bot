@@ -5,8 +5,8 @@ DOCKER_COMPOSE := docker-compose -f docker-compose.test.yml
 
 install:
 	$(PYTHON) -m venv env
-    source env/bin/activate
-    pip install -r requirements.txt
+	source env/bin/activate
+	pip install -r requirements.txt
 
 run:
 	$(PYTHON) main.py
