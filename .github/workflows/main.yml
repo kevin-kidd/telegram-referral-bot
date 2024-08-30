@@ -132,3 +132,6 @@ jobs:
         tags: |
           ${{ env.DOCKER_USERNAME }}/telegram-referral-bot:latest
           ${{ env.DOCKER_USERNAME }}/telegram-referral-bot:${{ github.sha }}
+        platforms: |
+          linux/amd64
+          linux/arm64
