@@ -4,7 +4,9 @@ DOCKER_COMPOSE := docker-compose -f docker-compose.test.yml
 .PHONY: install run test lint setup-db test-coverage test-coverage-html unit-test integration-test
 
 install:
-	$(PYTHON) -m pip install -r requirements.txt
+	$(PYTHON) -m venv env
+    source env/bin/activate
+    pip install -r requirements.txt
 
 run:
 	$(PYTHON) main.py
