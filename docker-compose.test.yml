@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:13
+    image: postgres
     environment:
       POSTGRES_DB: test_db
       POSTGRES_USER: test_user
