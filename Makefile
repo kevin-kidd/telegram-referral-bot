@@ -17,7 +17,7 @@ unit-test:
 integration-test:
 	$(DOCKER_COMPOSE) up -d db
 	@echo "Waiting for database to be ready..."
-	@sleep 5
+	@$(DOCKER_COMPOSE) run --rm db sh -c 'while ! pg_isready -h db -p 5432 -U test_user -d test_db; do sleep 1; done'
 	DB_HOST=localhost DB_PORT=5432 DB_NAME=test_db DB_USER=test_user DB_PASSWORD=test_password TESTING=True $(VENV)python -m pytest -v tests/test_integration.py
 	$(DOCKER_COMPOSE) down
 
