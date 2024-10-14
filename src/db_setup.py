@@ -37,7 +37,7 @@ def init_db_pool():
                 20,
                 host=DB_HOST,
                 port=DB_PORT,
-                dbname=DB_NAME if not is_testing else f"test_{DB_NAME}",
+                dbname=DB_NAME,
                 user=DB_USER,
                 password=DB_PASSWORD,
             )
