@@ -30,8 +30,7 @@ setup-db:
 	docker-compose up -d db
 	@echo "Waiting for database to be ready..."
 	@sleep 5
-	DB_HOST=localhost DB_PORT=5432 $(VENV)python -m src.db_setup
-	docker-compose down
+	$(VENV)python -m src.db_setup
 
 test-coverage:
 	mkdir -p coverage_data
